@@ -34,9 +34,15 @@ class KubeApi {
     const caCert = KUBERNETES_SERVICE_PROTOCOL === "https"
       ? await Deno.readTextFile(KUBERNETES_SERVICE_CERT_PATH)
       : null;
+    const isDefaultPort = (KUBERNETES_SERVICE_PROTOCOL === "https" &&
+      KUBERNETES_SERVICE_PORT === 443) ||
+      (KUBERNETES_SERVICE_PROTOCOL === "http" &&
+        KUBERNETES_SERVICE_PORT === 80);
     const url = [
       `${KUBERNETES_SERVICE_PROTOCOL}://`,
-      `${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}`,
+      isDefaultPort
+        ? KUBERNETES_SERVICE_HOST
+        : `${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}`,
       path,
     ].join("");
     const client = caCert != null
