@@ -31,30 +31,26 @@ echo "Using service name: ${RETHINK_CLUSTER}"
 echo "Using server name: ${SERVER_NAME}"
 
 echo "Checking for other nodes..."
-if [[ -n "${KUBERNETES_SERVICE_HOST}" && -z "${USE_SERVICE_LOOKUP}" ]]; then
-  echo "Using endpoints to lookup other nodes..."
-  URL="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/api/v1/namespaces/${POD_NAMESPACE}/endpoints/${RETHINK_CLUSTER}"
-  echo "Endpoint url: ${URL}"
-  echo "Looking for IPs..."
-  token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-  # try to pick up first different ip from endpoints
-  IP=$(curl -s ${URL} --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt --header "Authorization: Bearer ${token}" \
-    | jq -s -r --arg h "${POD_IP}" '.[0].subsets | .[].addresses | [ .[].ip ] | map(select(. != $h)) | .[0]') || exit 1
-  [[ "${IP}" == null ]] && IP=""
-  JOIN_ENDPOINTS="${IP}"
+
+JOIN_ENDPOINTS=`./findPeers`
+
+echo "findPeers: ${JOIN_ENDPOINTS}"
+
+if [ -z "$JOIN_ENDPOINTS" ]
+then
+  if [[ "$SERVER_NAME" == *"1"* ]];
+  then
+    echo "No other nodes found, but name contains 1.. so skip sleep"
+  else
+    echo "No other nodes found, sleep 10"
+    sleep 10
+    JOIN_ENDPOINTS=`./findPeers`
+  fi
 else
-  echo "Using service to lookup other nodes..."
-  # We can just use ${RETHINK_CLUSTER} due to dns lookup
-  # Instead though, let's be explicit:
-  JOIN_ENDPOINTS=$(getent hosts "${RETHINK_CLUSTER}.${POD_NAMESPACE}.svc.cluster.local" | awk '{print $1}')
-
-  # Let's filter out our IP address if it's in there...
-  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -e "s/${POD_IP}//g")
+  # xargs echo removes extra spaces before/after
+  # tr removes extra spaces in the middle
+  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | xargs echo | tr -s ' ')
 fi
-
-# xargs echo removes extra spaces before/after
-# tr removes extra spaces in the middle
-JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | xargs echo | tr -s ' ')
 
 if [ -n "${JOIN_ENDPOINTS}" ]; then
   echo "Found other nodes: ${JOIN_ENDPOINTS}"
@@ -64,7 +60,7 @@ if [ -n "${JOIN_ENDPOINTS}" ]; then
   JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -r 's/([0-9.])+/&:29015/g')
 
   # Put --join before each
-  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -e 's/^\|[ ]/&--join /g')
+  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -r 's/^|[ ]/&--join /g')
 else
   echo "No other nodes detected, will be a single instance."
   if [ -n "$PROXY" ]; then
