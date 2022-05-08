@@ -6,7 +6,7 @@ build:
 	docker build ./ -t $I:$T
 
 push:
-	docker push ./ -t $I:$T
+	docker push $I:$T
 
 build-no-cache:
 	docker build --no-cache ./ -t $I:$T
