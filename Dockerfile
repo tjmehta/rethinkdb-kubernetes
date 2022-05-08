@@ -61,10 +61,10 @@ MAINTAINER Tejesh Mehta <@tjmehta>
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
 RUN chmod +x /usr/local/bin/dumb-init
 
-COPY --from=build_findPeers /tmp/findPeers ./findPeers
-COPY --from=build_liveness_probe /tmp/livenessProbe ./livenessProbe
-COPY --from=build_startup_probe /tmp/startupProbe ./startupProbe
-ADD run.sh ./
-RUN chmod u+x ./findPeers ./livenessProbe ./startupProbe ./run.sh
+COPY --from=build_findPeers /tmp/findPeers /findPeers
+COPY --from=build_liveness_probe /tmp/livenessProbe /livenessProbe
+COPY --from=build_startup_probe /tmp/startupProbe /startupProbe
+ADD run.sh /
+RUN chmod u+x /findPeers /livenessProbe /startupProbe /run.sh
 
-ENTRYPOINT ["/usr/local/bin/dumb-init", "./run.sh"]
+ENTRYPOINT ["/usr/local/bin/dumb-init", "/run.sh"]
