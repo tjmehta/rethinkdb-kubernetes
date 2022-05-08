@@ -62,7 +62,7 @@ ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_a
 RUN chmod +x /usr/local/bin/dumb-init
 
 COPY --from=build_findPeers /tmp/findPeers /findPeers
-COPY --from=build_startup_probe /tmp/readinessProbe /readinessProbe
+COPY --from=build_readiness_probe /tmp/readinessProbe /readinessProbe
 COPY --from=build_liveness_probe /tmp/livenessProbe /livenessProbe
 COPY --from=build_startup_probe /tmp/startupProbe /startupProbe
 ADD run.sh /
