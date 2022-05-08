@@ -1,3 +1,4 @@
+// readiness = is the pod healthy enough for traffic?
 const RETHINK_HOST = Deno.env.get("RETHINK_HOST") ?? "localhost";
 const RETHINK_PORT = (() => {
   const portStr = Deno.env.get("RETHINK_PORT");

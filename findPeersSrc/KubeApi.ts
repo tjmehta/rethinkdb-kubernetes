@@ -41,7 +41,7 @@ class KubeApi {
     const url = [
       `${KUBERNETES_SERVICE_PROTOCOL}://`,
       isDefaultPort
-        ? KUBERNETES_SERVICE_HOST
+        ? "kubernetes.default.svc"
         : `${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}`,
       path,
     ].join("");
