@@ -70,7 +70,10 @@ class KubeApi {
     const body = await res.json();
     const addresses: Array<{ ip: string }> =
       (body?.subsets && body?.subsets[0]?.addresses) ?? [];
-    const ips = addresses.map(({ ip }) => ip as string);
+    const notReadyAddresses: Array<{ ip: string }> =
+      (body?.subsets && body?.subsets[0]?.notReadyAddresses) ?? [];
+    const allAddresses = addresses.concat(notReadyAddresses);
+    const ips = allAddresses.map(({ ip }) => ip as string);
 
     return ips;
   }
