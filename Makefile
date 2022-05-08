@@ -5,6 +5,9 @@ T=2.4.1-$H
 build:
 	docker build ./ -t $I:$T
 
+push:
+	docker push ./ -t $I:$T
+
 build-no-cache:
 	docker build --no-cache ./ -t $I:$T
 
@@ -15,7 +18,7 @@ dev-clear-cache:
 
 dev-build-findPeers:
 	deno bundle --unstable ./findPeersSrc/findPeers.ts -- findPeers.js
-	deno compile --allow-env --allow-net --allow-read findPeers.js -- findPeers
+	deno compile --unstable --allow-env --allow-net --allow-read findPeers.js -- findPeers
 dev-build-run-findPeers: dev-build-findPeers
 	KUBERNETES_SERVICE_PROTOCOL=http KUBERNETES_SERVICE_HOST=localhost KUBERNETES_SERVICE_PORT=3003 KUBERNETES_SERVICE_TOKEN_PATH=/Users/tjmehta/Developer/@tjmehta/rethinkdb-kubernetes/findPeersSrc/mocks/mockToken KUBERNETES_SERVICE_CERT_PATH=foo ./findPeers
 

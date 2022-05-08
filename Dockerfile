@@ -50,7 +50,7 @@ WORKDIR /tmp
 ADD findPeersSrc/ /tmp/findPeersSrc
 
 RUN deno bundle --unstable ./findPeersSrc/findPeers.ts -- findPeers.js
-RUN deno compile --allow-env --allow-net --allow-read findPeers.js -- findPeers
+RUN deno compile --unstable --allow-env --allow-net --allow-read findPeers.js -- findPeers
 
 ############################################
 
