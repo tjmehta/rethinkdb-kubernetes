@@ -36,9 +36,20 @@ JOIN_ENDPOINTS=`./findPeers`
 
 echo "findPeers: ${JOIN_ENDPOINTS}"
 
-# xargs echo removes extra spaces before/after
-# tr removes extra spaces in the middle
-JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | xargs echo | tr -s ' ')
+if [ -z "$JOIN_ENDPOINTS" ]
+then
+  if [[ "$SERVER_NAME" == *"1"* ]];
+  then
+    echo "No other nodes found, but name contains 1.. so skip sleep"
+  else
+    echo "No other nodes found, sleep 10"
+    sleep 10
+  fi
+else
+  # xargs echo removes extra spaces before/after
+  # tr removes extra spaces in the middle
+  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | xargs echo | tr -s ' ')
+fi
 
 if [ -n "${JOIN_ENDPOINTS}" ]; then
   echo "Found other nodes: ${JOIN_ENDPOINTS}"

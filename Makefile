@@ -42,3 +42,6 @@ dev-build-run-startupProbe: dev-build-startupProbe
 
 dev-run-run:
 	KUBERNETES_SERVICE_PROTOCOL=http KUBERNETES_SERVICE_HOST=localhost KUBERNETES_SERVICE_PORT=3003 KUBERNETES_SERVICE_TOKEN_PATH=/Users/tjmehta/Developer/@tjmehta/rethinkdb-kubernetes/findPeersSrc/mocks/mockToken KUBERNETES_SERVICE_CERT_PATH=foo ./run.sh
+
+dev-run-run-main:
+	POD_NAME=foo_1_yaya KUBERNETES_SERVICE_PROTOCOL=http KUBERNETES_SERVICE_HOST=localhost KUBERNETES_SERVICE_PORT=3003 KUBERNETES_SERVICE_TOKEN_PATH=/Users/tjmehta/Developer/@tjmehta/rethinkdb-kubernetes/findPeersSrc/mocks/mockToken KUBERNETES_SERVICE_CERT_PATH=foo ./run.sh
