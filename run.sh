@@ -44,6 +44,7 @@ then
   else
     echo "No other nodes found, sleep 10"
     sleep 10
+    JOIN_ENDPOINTS=`./findPeers`
   fi
 else
   # xargs echo removes extra spaces before/after
