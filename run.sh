@@ -48,7 +48,7 @@ if [ -n "${JOIN_ENDPOINTS}" ]; then
   JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -r 's/([0-9.])+/&:29015/g')
 
   # Put --join before each
-  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -e 's/^\|[ ]/&--join /g')
+  JOIN_ENDPOINTS=$(echo ${JOIN_ENDPOINTS} | sed -r 's/^|[ ]/&--join /g')
 else
   echo "No other nodes detected, will be a single instance."
   if [ -n "$PROXY" ]; then

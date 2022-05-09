@@ -68,4 +68,6 @@ COPY --from=build_startup_probe /tmp/startupProbe /startupProbe
 ADD run.sh /
 RUN chmod u+x /findPeers /readinessProbe /livenessProbe /startupProbe /run.sh
 
+WORKDIR /
+
 ENTRYPOINT ["/usr/local/bin/dumb-init", "/run.sh"]
