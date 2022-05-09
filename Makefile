@@ -1,15 +1,22 @@
+T:=$(shell git describe --tags --abbrev=0)
 H:=$(shell git rev-parse --short HEAD)
 I=tjmehta/rethinkdb-kubernetes
-T=2.4.1-$H
+V=2.4.1-$H
+
 
 build:
 	docker build ./ -t $I:$T
-
 push:
 	docker push $I:$T
 
+build-dev:
+	docker build ./ -t $I:$V
+
+push-dev:
+	docker push $I:$V
+
 build-no-cache:
-	docker build --no-cache ./ -t $I:$T
+	docker build --no-cache ./ -t $I:$V
 
 dev-clear-cache:
 	deno cache --unstable --reload ./findPeersSrc/findPeers.ts
