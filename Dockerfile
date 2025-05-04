@@ -54,7 +54,7 @@ RUN deno compile --unstable --allow-env --allow-net --allow-read findPeers.js --
 
 ############################################
 
-FROM rethinkdb:2.4.4
+FROM rethinkdb:2.4.4-bookworm-slim
 LABEL maintainer="Tejesh Mehta <@tjmehta>"
 
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
