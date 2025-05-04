@@ -1,5 +1,5 @@
 FROM denoland/deno:1.10.3 as build_readiness_probe
-MAINTAINER Tejesh Mehta <@tjmehta>
+LABEL maintainer="Tejesh Mehta <@tjmehta>"
 
 # Build container to have a consistent go build environment
 
@@ -13,7 +13,7 @@ RUN deno compile --allow-env --allow-net readinessProbe.js -- readinessProbe
 ############################################
 
 FROM denoland/deno:1.10.3 as build_liveness_probe
-MAINTAINER Tejesh Mehta <@tjmehta>
+LABEL maintainer="Tejesh Mehta <@tjmehta>"
 
 # Build container to have a consistent go build environment
 
@@ -27,7 +27,7 @@ RUN deno compile --allow-env --allow-net livenessProbe.js -- livenessProbe
 ############################################
 
 FROM denoland/deno:1.10.3 as build_startup_probe
-MAINTAINER Tejesh Mehta <@tjmehta>
+LABEL maintainer="Tejesh Mehta <@tjmehta>"
 
 # Build container to have a consistent go build environment
 
@@ -41,7 +41,7 @@ RUN deno compile --allow-env --allow-net startupProbe.js -- startupProbe
 ############################################
 
 FROM denoland/deno:1.19.0 as build_findPeers
-MAINTAINER Tejesh Mehta <@tjmehta>
+LABEL maintainer="Tejesh Mehta <@tjmehta>"
 
 # Build container to have a consistent go build environment
 
@@ -54,9 +54,8 @@ RUN deno compile --unstable --allow-env --allow-net --allow-read findPeers.js --
 
 ############################################
 
-FROM rethinkdb:2.4.1
-
-MAINTAINER Tejesh Mehta <@tjmehta>
+FROM rethinkdb:2.4.4
+LABEL maintainer="Tejesh Mehta <@tjmehta>"
 
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
 RUN chmod +x /usr/local/bin/dumb-init
