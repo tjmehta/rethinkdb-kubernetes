@@ -1,6 +1,6 @@
 const __dirname = new URL(".", import.meta.url).pathname;
 const PORT = (() => {
-  const defaultPort = 3000;
+  const defaultPort = 3003;
   const portStr = Deno.env.get("PORT");
   if (portStr == null) return defaultPort;
   const portInt = parseInt(portStr, 10);

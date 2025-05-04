@@ -2,3 +2,4 @@
 findPeers
 livenessProbe
 startupProbe
+readinessProbe
